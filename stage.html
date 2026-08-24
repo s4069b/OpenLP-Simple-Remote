@@ -1,0 +1,112 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="description" content="A lightweight portrait-first remote control for OpenLP.">
+  <title>OpenLP Simple Remote</title>
+  <link rel="stylesheet" href="remote.css">
+</head>
+<body>
+<div id="app">
+  <header id="topbar">
+    <div id="left-tools">
+      <button id="settings-btn" class="top-tool" aria-label="Settings" title="Settings">
+        <svg class="icon-svg gear-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 8.2a3.8 3.8 0 1 0 0 7.6 3.8 3.8 0 0 0 0-7.6Z"/>
+          <path d="M19.2 13.6c.08-.52.08-1.08 0-1.6l2-1.55-1.9-3.3-2.45.98a8.1 8.1 0 0 0-1.4-.8L15.1 4.7h-3.8l-.37 2.63c-.5.2-.97.47-1.4.8l-2.45-.98-1.9 3.3L7.2 12a8.5 8.5 0 0 0 0 1.6l-2.02 1.55 1.9 3.3 2.45-.98c.43.33.9.6 1.4.8l.37 2.63h3.8l.37-2.63c.5-.2.97-.47 1.4-.8l2.45.98 1.9-3.3-2.02-1.55Z"/>
+        </svg>
+      </button>
+      <button id="browser-refresh-btn" class="top-tool" aria-label="Reload remote" title="Reload remote">
+        <svg class="icon-svg refresh-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M20 11a8 8 0 1 0-2.35 5.65"/>
+          <path d="M20 5v6h-6"/>
+        </svg>
+      </button>
+    </div>
+    <div id="screen-title">Service</div>
+    <div id="item-nav">
+      <button id="prev-item-top" class="nav-arrow" aria-label="Previous service item" title="Previous service item">
+        <svg class="icon-svg chevron-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg>
+      </button>
+      <button id="next-item-top" class="nav-arrow" aria-label="Next service item" title="Next service item">
+        <svg class="icon-svg chevron-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+    <section id="service-screen" class="screen active-screen">
+      <div id="service-list" class="ios-list"></div>
+    </section>
+
+    <section id="slides-screen" class="screen">
+      <div id="slide-list" class="ios-list"></div>
+    </section>
+  </main>
+
+  <footer id="sticky-footer">
+  <div id="display-controls">
+    <button id="black-btn" class="display-btn" title="Blank the presentation screen">Blank</button>
+    <button id="show-btn" class="display-btn active-display" title="Show the current presentation">Show</button>
+  </div>
+
+  <nav id="tabbar">
+    <button id="service-tab" class="tab active-tab" title="Show the service item list">
+      <span class="tab-icon">▤</span>
+      <span>Service</span>
+    </button>
+    <button id="slides-tab" class="tab" title="Show slides in the current service item">
+      <span class="tab-icon">▱</span>
+      <span>Slides</span>
+    </button>
+  </nav>
+
+  <div id="status-row">
+    <span id="state-text">Connecting…</span>
+    <span id="version-text">v1.0.1</span>
+  </div>
+  </footer>
+
+  <div id="settings-overlay" class="settings-overlay">
+    <div class="settings-card">
+      <div class="settings-header">
+        <span>Settings</span>
+        <button id="settings-done">Done</button>
+      </div>
+      <label class="settings-row">
+        <span class="settings-label">
+          <strong>Open Slides after selecting a service item</strong>
+          <small>Tap a service item to make it live and move straight to Slides.</small>
+        </span>
+        <span class="switch">
+          <input id="auto-slides-toggle" type="checkbox" checked>
+          <span class="switch-track"><span class="switch-thumb"></span></span>
+        </span>
+      </label>
+
+      <div class="font-size-setting">
+        <div class="font-size-heading"><strong>List Font Size</strong><span id="font-size-value">115%</span></div>
+        <input id="font-size-slider" class="font-size-slider" type="range" min="0" max="4" step="1" value="2" aria-label="List font size">
+        <div class="font-size-labels"><span>85</span><span>100</span><span>115</span><span>130</span><span>145</span></div>
+        <small>Changes service-item and slide text size.</small>
+      </div>
+
+      <div class="help-section">
+        <div class="help-title">Help</div>
+        <div class="help-row"><span class="help-icon"><svg class="icon-svg gear-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8.2a3.8 3.8 0 1 0 0 7.6 3.8 3.8 0 0 0 0-7.6Z"/><path d="M19.2 13.6c.08-.52.08-1.08 0-1.6l2-1.55-1.9-3.3-2.45.98a8.1 8.1 0 0 0-1.4-.8L15.1 4.7h-3.8l-.37 2.63c-.5.2-.97.47-1.4.8l-2.45-.98-1.9 3.3L7.2 12a8.5 8.5 0 0 0 0 1.6l-2.02 1.55 1.9 3.3 2.45-.98c.43.33.9.6 1.4.8l.37 2.63h3.8l.37-2.63c.5-.2.97-.47 1.4-.8l2.45.98 1.9-3.3-2.02-1.55Z"/></svg></span><span>Open these settings.</span></div>
+        <div class="help-row"><span class="help-icon"><svg class="icon-svg refresh-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.35 5.65"/><path d="M20 5v6h-6"/></svg></span><span>Reload the remote page completely.</span></div>
+        <div class="help-row"><span class="help-icon help-arrows"><svg class="icon-svg chevron-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg><svg class="icon-svg chevron-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span><span>Move to the previous or next service item.</span></div>
+        <div class="help-row"><strong>Blank</strong><span>Blank the presentation output.</span></div>
+        <div class="help-row"><strong>Show</strong><span>Return to the current presentation.</span></div>
+        <div class="help-row"><strong>Service</strong><span>Choose a service item.</span></div>
+        <div class="help-row"><strong>Slides</strong><span>Choose a slide within the current service item.</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="remote.js"></script>
+</body>
+</html>
