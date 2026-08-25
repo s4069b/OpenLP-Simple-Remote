@@ -16,6 +16,14 @@
     programmaticScroll: false,
     listFontIndex: 2,
     lastServerSlideIndex: -1,
+    soundcraftEnabled: false,
+    soundcraftMixers: [],
+    soundcraftActiveId: "",
+    soundcraftEditingId: "",
+    soundcraftModuleLoading: false,
+    soundcraftModuleLoaded: false,
+    lastTouchSelectionAt: 0,
+    slideScrollAnimation: null,
     openSlidesOnServiceSelect: true
   };
 
@@ -81,10 +89,51 @@
   }
 
   function slideText(slide) {
-    var t;
-    if (!slide) { return ""; }
+    var t, lines, cleaned, i, line;
+
+    if (!slide) {
+      return "";
+    }
+
     t = slide.text || slide.title || slide.Title || "";
-    return String(t).replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
+    t = String(t);
+
+    /*
+      Preserve the line structure supplied by OpenLP.
+
+      Some API responses contain literal newlines, while others contain HTML
+      such as <br>, <div> or <p>. Convert those structural breaks to newlines
+      before removing the remaining markup.
+    */
+    t = t.replace(/\r\n/g, "\n");
+    t = t.replace(/\r/g, "\n");
+    t = t.replace(/<br\s*\/?>/gi, "\n");
+    t = t.replace(/<\/div\s*>/gi, "\n");
+    t = t.replace(/<\/p\s*>/gi, "\n");
+    t = t.replace(/<[^>]+>/g, "");
+
+    /*
+      Clean each line independently so ordinary repeated spaces are tidied
+      without destroying carriage returns between song/Bible lines.
+    */
+    lines = t.split("\n");
+    cleaned = [];
+
+    for (i = 0; i < lines.length; i += 1) {
+      line = lines[i].replace(/[ \t]+/g, " ");
+      line = line.replace(/^[ \t]+|[ \t]+$/g, "");
+
+      /* Avoid huge runs of empty lines, but preserve intentional blank lines. */
+      if (line !== "" || (cleaned.length && cleaned[cleaned.length - 1] !== "")) {
+        cleaned.push(line);
+      }
+    }
+
+    while (cleaned.length && cleaned[cleaned.length - 1] === "") {
+      cleaned.pop();
+    }
+
+    return cleaned.join("\n");
   }
 
   function slideImage(slide) {
@@ -181,6 +230,8 @@
       }
       if (selected !== state.lastServerSlideIndex) {
         state.lastServerSlideIndex = selected;
+        cancelSlideScrollAnimation();
+        state.programmaticScroll = false;
         state.manualScrollUntil = 0;
 
         if (state.scrollReturnTimer) {
@@ -196,6 +247,66 @@
   }
 
 
+  function cancelSlideScrollAnimation() {
+    if (state.slideScrollAnimation !== null) {
+      try {
+        window.cancelAnimationFrame(state.slideScrollAnimation);
+      } catch (e) {}
+      state.slideScrollAnimation = null;
+    }
+  }
+
+  function easeInOutCubic(t) {
+    if (t < 0.5) {
+      return 4 * t * t * t;
+    }
+    return 1 - Math.pow(-2 * t + 2, 3) / 2;
+  }
+
+  function animateSlidesScroll(scroller, target, duration) {
+    var startTop = scroller.scrollTop;
+    var distance = target - startTop;
+    var startTime = null;
+
+    cancelSlideScrollAnimation();
+
+    if (Math.abs(distance) < 2) {
+      return;
+    }
+
+    state.programmaticScroll = true;
+
+    function frame(timestamp) {
+      var elapsed, progress, eased;
+
+      if (startTime === null) {
+        startTime = timestamp;
+      }
+
+      elapsed = timestamp - startTime;
+      progress = elapsed / duration;
+
+      if (progress > 1) {
+        progress = 1;
+      }
+
+      eased = easeInOutCubic(progress);
+      scroller.scrollTop = startTop + (distance * eased);
+
+      if (progress < 1) {
+        state.slideScrollAnimation = window.requestAnimationFrame(frame);
+      } else {
+        scroller.scrollTop = target;
+        state.slideScrollAnimation = null;
+        window.setTimeout(function () {
+          state.programmaticScroll = false;
+        }, 80);
+      }
+    }
+
+    state.slideScrollAnimation = window.requestAnimationFrame(frame);
+  }
+
   function setSlidesScrollTop(scroller, target, gentle) {
     var maxScroll;
 
@@ -204,6 +315,7 @@
     }
 
     maxScroll = Math.max(0, scroller.scrollHeight - scroller.clientHeight);
+
     if (target < 0) {
       target = 0;
     }
@@ -215,26 +327,24 @@
       return;
     }
 
-    state.programmaticScroll = true;
-
-    if (gentle && typeof scroller.scrollTo === "function") {
-      try {
-        scroller.scrollTo({
-          top: target,
-          behavior: "smooth"
-        });
-      } catch (e) {
-        scroller.scrollTop = target;
-      }
+    if (gentle) {
+      /*
+        Do not rely on CSS smooth scrolling. iOS 10 does not support it.
+        Animate manually so old iPads get the same gentle return.
+      */
+      animateSlidesScroll(scroller, target, 550);
     } else {
+      cancelSlideScrollAnimation();
+      state.programmaticScroll = true;
       scroller.scrollTop = target;
-    }
 
-    window.setTimeout(function () {
-      state.programmaticScroll = false;
-    }, gentle ? 500 : 80);
+      window.setTimeout(function () {
+        state.programmaticScroll = false;
+      }, 80);
+    }
   }
 
+  
   function normalSlidePosition(force, gentle) {
     var scroller = byId("slides-screen");
     var rows, current, nextVisual, endMarkers;
@@ -326,6 +436,9 @@
 
   function beginManualSlideBrowse() {
     var now = new Date().getTime();
+
+    cancelSlideScrollAnimation();
+    state.programmaticScroll = false;
 
     state.manualScrollUntil = now + 1000;
 
@@ -422,6 +535,8 @@
 
   function selectSlideIndex(index) {
     guardCommand(function () {
+      cancelSlideScrollAnimation();
+      state.programmaticScroll = false;
       state.manualScrollUntil = 0;
       if (state.scrollReturnTimer) {
         window.clearTimeout(state.scrollReturnTimer);
@@ -476,6 +591,276 @@
     window.setTimeout(function () { normalSlidePosition(true, false); }, 30);
   }
 
+  function soundcraftStorageLoad() {
+    var raw, data, i;
+
+    try {
+      raw = window.localStorage.getItem("openlp-soundcraft-settings");
+      if (raw) {
+        data = JSON.parse(raw);
+        state.soundcraftEnabled = !!data.enabled;
+        state.soundcraftMixers = data.mixers || [];
+        state.soundcraftActiveId = data.activeId || "";
+      }
+    } catch (e) {
+      state.soundcraftEnabled = false;
+      state.soundcraftMixers = [];
+      state.soundcraftActiveId = "";
+    }
+
+    if (state.soundcraftMixers.length && !findSoundcraftMixer(state.soundcraftActiveId)) {
+      state.soundcraftActiveId = state.soundcraftMixers[0].id;
+    }
+
+    byId("soundcraft-enable-toggle").checked = state.soundcraftEnabled;
+    renderSoundcraftSettings();
+  }
+
+  function soundcraftStorageSave() {
+    try {
+      window.localStorage.setItem("openlp-soundcraft-settings", JSON.stringify({
+        enabled: state.soundcraftEnabled,
+        mixers: state.soundcraftMixers,
+        activeId: state.soundcraftActiveId
+      }));
+    } catch (e) {}
+  }
+
+  function findSoundcraftMixer(id) {
+    var i;
+    for (i = 0; i < state.soundcraftMixers.length; i += 1) {
+      if (state.soundcraftMixers[i].id === id) {
+        return state.soundcraftMixers[i];
+      }
+    }
+    return null;
+  }
+
+  function makeSoundcraftId() {
+    return "mixer-" + new Date().getTime() + "-" + Math.floor(Math.random() * 100000);
+  }
+
+  function renderSoundcraftSettings() {
+    var config = byId("soundcraft-config");
+    var select = byId("soundcraft-mixer-select");
+    var recordBtn = byId("soundcraft-record-btn");
+    var tabbar = byId("tabbar");
+    var i, option, mixer;
+
+    config.hidden = !state.soundcraftEnabled;
+    recordBtn.hidden = !state.soundcraftEnabled;
+
+    if (state.soundcraftEnabled) {
+      tabbar.className = "soundcraft-enabled";
+    } else {
+      tabbar.className = "";
+      setText("soundcraft-status", "Disabled");
+      byId("soundcraft-status").className = "soundcraft-status";
+      if (window.SoundcraftRecorderBridge) {
+        window.SoundcraftRecorderBridge.disconnect();
+      }
+    }
+
+    while (select.options.length) {
+      select.remove(0);
+    }
+
+    if (!state.soundcraftMixers.length) {
+      option = document.createElement("option");
+      option.value = "";
+      option.appendChild(document.createTextNode("No mixers saved"));
+      select.appendChild(option);
+    } else {
+      for (i = 0; i < state.soundcraftMixers.length; i += 1) {
+        mixer = state.soundcraftMixers[i];
+        option = document.createElement("option");
+        option.value = mixer.id;
+        option.appendChild(document.createTextNode(mixer.name + " — " + mixer.host));
+        if (mixer.id === state.soundcraftActiveId) {
+          option.selected = true;
+        }
+        select.appendChild(option);
+      }
+    }
+
+    if (state.soundcraftEnabled) {
+      ensureSoundcraftModule();
+    }
+  }
+
+  function ensureSoundcraftModule() {
+    var script;
+
+    if (!state.soundcraftEnabled) {
+      return;
+    }
+
+    if (window.SoundcraftRecorderBridge) {
+      state.soundcraftModuleLoaded = true;
+      connectSelectedSoundcraft();
+      return;
+    }
+
+    if (state.soundcraftModuleLoading) {
+      return;
+    }
+
+    /*
+      The ordinary OpenLP remote remains pure ES5 and does not load this
+      modern module unless Soundcraft support is explicitly enabled.
+    */
+    state.soundcraftModuleLoading = true;
+    setText("soundcraft-status", "Recorder module loading…");
+
+    script = document.createElement("script");
+    script.type = "module";
+    script.src = "soundcraft.mjs";
+
+    script.onload = function () {
+      state.soundcraftModuleLoading = false;
+      state.soundcraftModuleLoaded = true;
+      if (state.soundcraftEnabled) {
+        connectSelectedSoundcraft();
+      }
+    };
+
+    script.onerror = function () {
+      state.soundcraftModuleLoading = false;
+      state.soundcraftModuleLoaded = false;
+      setText("soundcraft-status", "Recorder module unavailable");
+      byId("soundcraft-status").className = "soundcraft-status error";
+      setSoundcraftButtonState(false, false, false, "Mixer Record");
+    };
+
+    document.getElementsByTagName("head")[0].appendChild(script);
+  }
+
+  function connectSelectedSoundcraft() {
+    var mixer = findSoundcraftMixer(state.soundcraftActiveId);
+
+    if (!state.soundcraftEnabled) {
+      return;
+    }
+
+    if (!mixer) {
+      setText("soundcraft-status", "No mixer");
+      byId("soundcraft-status").className = "soundcraft-status";
+      setSoundcraftButtonState(false, false, false, "No mixer");
+      return;
+    }
+
+    if (!window.SoundcraftRecorderBridge) {
+      setText("soundcraft-status", "Recorder module loading…");
+      byId("soundcraft-status").className = "soundcraft-status";
+      setSoundcraftButtonState(false, false, false, "Mixer Record");
+      ensureSoundcraftModule();
+      return;
+    }
+
+    setText("soundcraft-status", "Connecting…");
+    byId("soundcraft-status").className = "soundcraft-status";
+    window.SoundcraftRecorderBridge.connect(mixer.host);
+  }
+
+  function setSoundcraftButtonState(connected, recording, busy, label) {
+    var btn = byId("soundcraft-record-btn");
+    var labelEl = byId("soundcraft-record-label");
+
+    btn.disabled = !connected || !!busy;
+    btn.className = "tab recorder-tab";
+    btn.className += connected ? " connected" : " disconnected";
+    if (recording) { btn.className += " recording"; }
+    if (busy) { btn.className += " busy"; }
+
+    if (labelEl) {
+      setText("soundcraft-record-label", recording ? "Stop Record" : "Mixer Record");
+    }
+  }
+
+
+  window.OpenLPSoundcraftStatus = function (status) {
+    var text = status && status.text ? status.text : "Disconnected";
+    var cls = "soundcraft-status";
+
+    if (status && status.recording) {
+      cls += " recording";
+    } else if (status && status.connected) {
+      cls += " connected";
+    } else if (status && status.error) {
+      cls += " error";
+    }
+
+    setText("soundcraft-status", text);
+    byId("soundcraft-status").className = cls;
+
+    setSoundcraftButtonState(
+      !!(status && status.connected),
+      !!(status && status.recording),
+      !!(status && status.busy),
+      status && status.recording ? "Stop Rec" : "Record"
+    );
+  };
+
+  window.OpenLPSoundcraftModuleReady = function () {
+    if (state.soundcraftEnabled) {
+      connectSelectedSoundcraft();
+    }
+  };
+
+  function openSoundcraftEditor(mixer) {
+    state.soundcraftEditingId = mixer ? mixer.id : "";
+    byId("soundcraft-name-input").value = mixer ? mixer.name : "";
+    byId("soundcraft-host-input").value = mixer ? mixer.host : "";
+    byId("soundcraft-editor").hidden = false;
+  }
+
+  function closeSoundcraftEditor() {
+    state.soundcraftEditingId = "";
+    byId("soundcraft-editor").hidden = true;
+  }
+
+  function saveSoundcraftMixer() {
+    var name = byId("soundcraft-name-input").value.replace(/^\s+|\s+$/g, "");
+    var host = byId("soundcraft-host-input").value.replace(/^\s+|\s+$/g, "");
+    var mixer = state.soundcraftEditingId ? findSoundcraftMixer(state.soundcraftEditingId) : null;
+
+    host = host.replace(/^https?:\/\//i, "").replace(/\/.*$/, "");
+
+    if (!name || !host) {
+      return;
+    }
+
+    if (mixer) {
+      mixer.name = name;
+      mixer.host = host;
+    } else {
+      mixer = {id: makeSoundcraftId(), name: name, host: host};
+      state.soundcraftMixers.push(mixer);
+      state.soundcraftActiveId = mixer.id;
+    }
+
+    soundcraftStorageSave();
+    closeSoundcraftEditor();
+    renderSoundcraftSettings();
+  }
+
+  function removeSelectedSoundcraftMixer() {
+    var i;
+    if (!state.soundcraftActiveId) {
+      return;
+    }
+
+    for (i = state.soundcraftMixers.length - 1; i >= 0; i -= 1) {
+      if (state.soundcraftMixers[i].id === state.soundcraftActiveId) {
+        state.soundcraftMixers.splice(i, 1);
+      }
+    }
+
+    state.soundcraftActiveId = state.soundcraftMixers.length ? state.soundcraftMixers[0].id : "";
+    soundcraftStorageSave();
+    renderSoundcraftSettings();
+  }
+
   function openSettings() {
     var overlay = byId("settings-overlay");
     var toggle = byId("auto-slides-toggle");
@@ -516,6 +901,7 @@
       if (!isNaN(savedFont) && savedFont >= 0 && savedFont <= 4) { state.listFontIndex = savedFont; }
     } catch (e) {}
     applyListFontSize(state.listFontIndex, false);
+    soundcraftStorageLoad();
     slidesScroller = byId("slides-screen");
 
     if (slidesScroller) {
@@ -526,6 +912,11 @@
     }
 
     byId("settings-btn").onclick = openSettings;
+    byId("settings-btn").ontouchstart = function (event) {
+      if (event && event.preventDefault) { event.preventDefault(); }
+      openSettings();
+      return false;
+    };
     byId("browser-refresh-btn").onclick = function () {
       window.location.reload();
     };
@@ -533,6 +924,36 @@
     byId("auto-slides-toggle").onchange = saveAutoSlidesSetting;
     byId("font-size-slider").oninput = function () { applyListFontSize(this.value, true); };
     byId("font-size-slider").onchange = function () { applyListFontSize(this.value, true); };
+
+    byId("soundcraft-enable-toggle").onchange = function () {
+      state.soundcraftEnabled = !!this.checked;
+      soundcraftStorageSave();
+      renderSoundcraftSettings();
+    };
+
+    byId("soundcraft-mixer-select").onchange = function () {
+      state.soundcraftActiveId = this.value;
+      soundcraftStorageSave();
+      connectSelectedSoundcraft();
+    };
+
+    byId("soundcraft-add-btn").onclick = function () {
+      openSoundcraftEditor(null);
+    };
+
+    byId("soundcraft-edit-btn").onclick = function () {
+      openSoundcraftEditor(findSoundcraftMixer(state.soundcraftActiveId));
+    };
+
+    byId("soundcraft-remove-btn").onclick = removeSelectedSoundcraftMixer;
+    byId("soundcraft-save-btn").onclick = saveSoundcraftMixer;
+    byId("soundcraft-cancel-btn").onclick = closeSoundcraftEditor;
+
+    byId("soundcraft-record-btn").onclick = function () {
+      if (window.SoundcraftRecorderBridge) {
+        window.SoundcraftRecorderBridge.toggleDesired();
+      }
+    };
     byId("settings-overlay").onclick = function (event) {
       if (event.target === byId("settings-overlay")) {
         closeSettings();

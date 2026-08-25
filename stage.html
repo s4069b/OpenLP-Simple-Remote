@@ -62,11 +62,17 @@
       <span class="tab-icon">▱</span>
       <span>Slides</span>
     </button>
+    <button id="soundcraft-record-btn" class="tab recorder-tab" title="Soundcraft mixer recorder" hidden>
+      <span class="tab-icon recorder-icon-wrap">
+        <svg class="recorder-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="6"></circle></svg>
+      </span>
+      <span id="soundcraft-record-label">Mixer Record</span>
+    </button>
   </nav>
 
   <div id="status-row">
     <span id="state-text">Connecting…</span>
-    <span id="version-text">v1.0.1</span>
+    <span id="version-text">v1.1.0</span>
   </div>
   </footer>
 
@@ -94,6 +100,54 @@
         <small>Changes service-item and slide text size.</small>
       </div>
 
+      <div class="soundcraft-setting">
+        <div class="font-size-heading">
+          <strong>Soundcraft Recorder</strong>
+          <span id="soundcraft-status" class="soundcraft-status">Disabled</span>
+        </div>
+
+        <label class="settings-row compact-setting-row">
+          <span class="settings-label">
+            <strong>Enable Soundcraft recording controls</strong>
+            <small>Optional Ui12 / Ui16 2-track USB recorder control.</small>
+          </span>
+          <span class="switch">
+            <input id="soundcraft-enable-toggle" type="checkbox">
+            <span class="switch-track"><span class="switch-thumb"></span></span>
+          </span>
+        </label>
+
+        <div id="soundcraft-config" class="soundcraft-config" hidden>
+          <label class="soundcraft-field">
+            <span>Active mixer</span>
+            <select id="soundcraft-mixer-select"></select>
+          </label>
+
+          <div class="soundcraft-actions">
+            <button id="soundcraft-add-btn" type="button">Add mixer</button>
+            <button id="soundcraft-edit-btn" type="button">Edit</button>
+            <button id="soundcraft-remove-btn" type="button">Remove</button>
+          </div>
+
+          <div id="soundcraft-editor" class="soundcraft-editor" hidden>
+            <label class="soundcraft-field">
+              <span>Name</span>
+              <input id="soundcraft-name-input" type="text" maxlength="40" placeholder="e.g. Church Ui16">
+            </label>
+            <label class="soundcraft-field">
+              <span>IP address / hostname</span>
+              <input id="soundcraft-host-input" type="text" maxlength="80" placeholder="e.g. 192.168.1.50">
+            </label>
+            <div class="soundcraft-actions">
+              <button id="soundcraft-save-btn" type="button">Save mixer</button>
+              <button id="soundcraft-cancel-btn" type="button">Cancel</button>
+            </div>
+          </div>
+
+          <small class="soundcraft-note">The last selected mixer is remembered on this device.</small>
+        </div>
+      </div>
+
       <div class="help-section">
         <div class="help-title">Help</div>
         <div class="help-row"><span class="help-icon"><svg class="icon-svg gear-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8.2a3.8 3.8 0 1 0 0 7.6 3.8 3.8 0 0 0 0-7.6Z"/><path d="M19.2 13.6c.08-.52.08-1.08 0-1.6l2-1.55-1.9-3.3-2.45.98a8.1 8.1 0 0 0-1.4-.8L15.1 4.7h-3.8l-.37 2.63c-.5.2-.97.47-1.4.8l-2.45-.98-1.9 3.3L7.2 12a8.5 8.5 0 0 0 0 1.6l-2.02 1.55 1.9 3.3 2.45-.98c.43.33.9.6 1.4.8l.37 2.63h3.8l.37-2.63c.5-.2.97-.47 1.4-.8l2.45.98 1.9-3.3-2.02-1.55Z"/></svg></span><span>Open these settings.</span></div>
@@ -101,6 +155,7 @@
         <div class="help-row"><span class="help-icon help-arrows"><svg class="icon-svg chevron-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg><svg class="icon-svg chevron-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span><span>Move to the previous or next service item.</span></div>
         <div class="help-row"><strong>Blank</strong><span>Blank the presentation output.</span></div>
         <div class="help-row"><strong>Show</strong><span>Return to the current presentation.</span></div>
+        <div class="help-row"><strong>Mixer Record</strong><span>When enabled, starts/stops the selected Soundcraft Ui12/Ui16 2-track USB recorder and follows the mixer-reported state.</span></div>
         <div class="help-row"><strong>Service</strong><span>Choose a service item.</span></div>
         <div class="help-row"><strong>Slides</strong><span>Choose a slide within the current service item.</span></div>
       </div>

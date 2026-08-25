@@ -667,3 +667,348 @@ html, body {
     min-height: 246px;
   }
 }
+
+
+/* Optional Soundcraft recorder extension */
+.recorder-btn {
+  color: #d70015;
+  font-weight: 600;
+}
+
+.recorder-btn.recording {
+  background: #d70015;
+  color: #fff;
+}
+
+.recorder-btn.busy {
+  opacity: .65;
+}
+
+.recorder-btn.disconnected {
+  color: #8e8e93;
+}
+
+.soundcraft-setting {
+  margin-top: 10px;
+  background: #fff;
+  border-top: 1px solid #d8d8dc;
+}
+
+.soundcraft-setting > .font-size-heading {
+  padding: 14px 16px 4px;
+  margin: 0;
+}
+
+.soundcraft-status {
+  color: #8e8e93;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.soundcraft-status.connected { color: #248a3d; }
+.soundcraft-status.recording { color: #d70015; }
+.soundcraft-status.error { color: #d70015; }
+
+.compact-setting-row {
+  padding-top: 10px;
+  padding-bottom: 12px;
+}
+
+.soundcraft-config {
+  padding: 4px 16px 15px;
+}
+
+.soundcraft-field {
+  display: block;
+  margin-top: 10px;
+}
+
+.soundcraft-field > span {
+  display: block;
+  margin-bottom: 5px;
+  color: #6e6e73;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.soundcraft-field select,
+.soundcraft-field input {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 40px;
+  border: 1px solid #d1d1d6;
+  border-radius: 8px;
+  background: #fff;
+  color: #1d1d1f;
+  padding: 6px 9px;
+  font: inherit;
+}
+
+.soundcraft-actions {
+  display: flex;
+  gap: 7px;
+  margin-top: 9px;
+}
+
+.soundcraft-actions button {
+  min-height: 36px;
+  border: 1px solid #d1d1d6;
+  border-radius: 8px;
+  background: #fff;
+  color: #0a84ff;
+  padding: 5px 10px;
+  font: inherit;
+}
+
+.soundcraft-editor {
+  margin-top: 10px;
+  padding-top: 2px;
+  border-top: 1px solid #efeff2;
+}
+
+.soundcraft-note {
+  display: block;
+  margin-top: 10px;
+  color: #8e8e93;
+  font-size: 11px;
+}
+
+#tabbar.soundcraft-enabled { grid-template-columns:1fr 1fr 1fr; }
+.recorder-tab { color:#9b9ba0; }
+.recorder-tab.connected { color:#0a84ff; }
+.recorder-tab.recording { color:#d70015; font-weight:600; }
+.recorder-tab.busy { opacity:.65; }
+.recorder-tab.disconnected { color:#8e8e93; }
+.recorder-icon-wrap { display:flex; align-items:center; justify-content:center; }
+.recorder-icon { width:23px; height:23px; fill:none; stroke:currentColor; stroke-width:1.8; }
+.recorder-tab.recording .recorder-icon { fill:currentColor; }
+#soundcraft-record-label { white-space:nowrap; }
+
+
+/* beta.3 old-Safari compatibility */
+[hidden] {
+  display: none !important;
+}
+
+/*
+  Use Flexbox for the structural controls. This avoids CSS Grid edge cases
+  on iOS 10 while preserving the same appearance on modern browsers.
+*/
+#topbar {
+  display: flex !important;
+  align-items: center;
+}
+
+#left-tools {
+  display: flex !important;
+  flex: 0 0 108px;
+}
+
+#screen-title {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+#item-nav {
+  display: flex !important;
+  flex: 0 0 108px;
+}
+
+#display-controls {
+  display: flex !important;
+}
+
+#display-controls .display-btn {
+  flex: 1 1 50%;
+}
+
+#tabbar,
+#tabbar.soundcraft-enabled {
+  display: flex !important;
+}
+
+#tabbar .tab {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.help-row {
+  display: flex !important;
+}
+
+.help-row > strong,
+.help-row > .help-icon {
+  flex: 0 0 68px;
+}
+
+.help-row > span:last-child {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/*
+  Header and footer do not need CSS sticky at all because only #main scrolls.
+  Keeping them as non-scrolling flex siblings is much more reliable on old
+  Mobile Safari and prevents the header being dragged under Safari chrome.
+*/
+#topbar,
+#sticky-footer {
+  position: relative !important;
+  top: auto !important;
+  bottom: auto !important;
+  -webkit-transform: translateZ(0);
+}
+
+#main {
+  flex: 1 1 0 !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+.screen {
+  height: 100% !important;
+  overflow-y: scroll !important;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Give the footer a little extra room on old iPads. */
+#sticky-footer {
+  flex: 0 0 auto;
+  padding-bottom: 10px;
+}
+
+#status-row {
+  min-height: 28px;
+}
+
+
+/* beta.4: iOS 10 layout fixes */
+
+/* iOS 10 does not support the inset shorthand. */
+.settings-overlay {
+  top: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  left: 0 !important;
+}
+
+/*
+  Make #main a definite containing block, then make each active screen an
+  absolutely bounded scroller. This avoids old Mobile Safari's unreliable
+  nested flex/percentage-height scrolling.
+*/
+#main {
+  position: relative !important;
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  height: auto !important;
+  overflow: hidden !important;
+}
+
+.screen {
+  position: absolute !important;
+  top: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  width: auto !important;
+  height: auto !important;
+  overflow-x: hidden !important;
+  overflow-y: scroll !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+.screen:not(.active-screen) {
+  display: none !important;
+}
+
+.active-screen {
+  display: block !important;
+}
+
+/*
+  Avoid viewport-unit dependence on old Safari. The browser owns the visible
+  viewport height; the app simply fills html/body and uses flex for chrome.
+*/
+html,
+body {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  overflow: hidden !important;
+}
+
+body {
+  position: relative !important;
+}
+
+#app {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  max-height: 100% !important;
+  overflow: hidden !important;
+}
+
+/* Old Safari sometimes requires explicit shrink rules on flex children. */
+#topbar,
+#sticky-footer {
+  flex-shrink: 0 !important;
+}
+
+#main {
+  flex-shrink: 1 !important;
+}
+
+/* Settings panel must itself be scrollable on short screens. */
+.settings-overlay {
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch;
+}
+
+.settings-card {
+  flex: 0 0 auto;
+  margin-bottom: 20px;
+}
+
+/* Do not rely on CSS gap in old Safari. */
+.soundcraft-actions {
+  gap: 0 !important;
+}
+.soundcraft-actions button + button {
+  margin-left: 7px;
+}
+
+
+/* beta.7: preserve portrait-like app proportions in landscape */
+@media screen and (orientation: landscape) {
+  html,
+  body {
+    background: #2c2c2e !important;
+  }
+
+  #app {
+    /*
+      Keep the working remote approximately portrait-phone/tablet width,
+      rather than stretching controls and slide rows across the landscape screen.
+    */
+    width: 56.25vh !important;
+    max-width: 760px !important;
+    min-width: 320px;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    background: #fff;
+    box-shadow:
+      -10px 0 24px rgba(0,0,0,.22),
+       10px 0 24px rgba(0,0,0,.22);
+  }
+}
+
+/* Very short landscape screens: don't force a width wider than the viewport. */
+@media screen and (orientation: landscape) and (max-height: 480px) {
+  #app {
+    width: 70vh !important;
+    min-width: 0;
+    max-width: 92vw !important;
+  }
+}
