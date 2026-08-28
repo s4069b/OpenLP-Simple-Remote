@@ -1,12 +1,15 @@
 <!doctype html>
-<html>
+<html class="current-border-left">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="description" content="A lightweight portrait-first remote control for OpenLP.">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <title>OpenLP Simple Remote</title>
+  <link rel="stylesheet" href="theme.css">
   <link rel="stylesheet" href="remote.css">
 </head>
 <body>
@@ -161,6 +164,10 @@
       </div>
     </div>
   </div>
+        <div class="help-row">
+          <strong>Theme</strong>
+          <span>Nerd note: change the remote theme/look in the OpenLP data directory at <code>stages/remote/theme.css</code>.</span>
+        </div>
 </div>
 <script src="remote.js"></script>
 </body>

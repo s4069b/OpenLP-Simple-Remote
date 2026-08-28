@@ -1,5 +1,7 @@
 # OpenLP Simple Remote
 
+Unofficial community remote for OpenLP. Not affiliated with or endorsed by the OpenLP project.
+
 A lightweight, portrait-first web remote for OpenLP, designed to work well on older iPads and phones while keeping presentation controls deliberately simple.
 
 **This is an unofficial community project and is not part of OpenLP itself.**
@@ -70,14 +72,61 @@ The recorder integration should currently be considered **experimental until ver
 
 The current experimental recorder module uses the MIT-licensed `soundcraft-ui-connection` browser module and therefore requires internet access as well as LAN access to the mixer.
 
+
+## Changing colours
+
+All four main interface colours are kept in one file: `theme.css`.
+
+Edit only these variables:
+
+```css
+--theme-header       /* header and landscape side gutters */
+--theme-accent       /* active controls and accents */
+--theme-soft         /* selected and secondary surfaces */
+--theme-background   /* main warm background */
+```
+
+The remote also includes `favicon.png` and `apple-touch-icon.png` for browsers and iPad home-screen bookmarks.
+
+
+### Current slide emphasis
+
+`theme.css` also controls the current slide:
+
+```css
+--current-slide-fill
+--current-slide-text
+--current-slide-border
+--current-slide-border-width
+```
+
+To choose the border style, edit the opening `<html>` line in `stage.html`.
+
+For a thick left edge only:
+
+```html
+<html class="current-border-left">
+```
+
+For the same thick emphasis on all four sides:
+
+```html
+<html class="current-border-all">
+```
+
+This is intentionally a simple one-word edit so it remains compatible with older Safari/iOS.
+
 ## Project files
 
 Runtime files:
 
 - `stage.html`
+- `theme.css`
 - `remote.css`
 - `remote.js`
 - `soundcraft.mjs`
+- `favicon.png`
+- `apple-touch-icon.png`
 
 There is no package manager, transpiler, framework or build command.
 

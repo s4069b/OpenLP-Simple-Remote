@@ -1012,3 +1012,315 @@ body {
     max-width: 92vw !important;
   }
 }
+
+
+/* v1.1.0 light palette refresh */
+:root {
+  --remote-sage: #A6B5B0;
+  --remote-cream: #F7F8F2;
+  --remote-white: #FFFFFF;
+  --remote-pale: #EEF1EF;
+  --remote-line: #D8DDDA;
+  --remote-midgrey: #7D8581;
+  --remote-text: #292D2B;
+}
+
+html, body, #app, #main, .screen, .ios-list {
+  background: var(--remote-cream) !important;
+  color: var(--remote-text) !important;
+}
+
+#topbar {
+  background: var(--remote-cream) !important;
+  color: var(--remote-text) !important;
+  border-bottom-color: var(--remote-line) !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,.07) !important;
+}
+
+#screen-title {
+  color: var(--remote-text) !important;
+}
+
+.top-tool, .settings-btn, .nav-arrow {
+  color: #68736F !important;
+}
+
+.top-tool:active, .settings-btn:active, .nav-arrow:active {
+  background: var(--remote-pale) !important;
+}
+
+.service-row, .slide-row {
+  background: var(--remote-white) !important;
+  color: var(--remote-text) !important;
+  border-bottom-color: var(--remote-line) !important;
+}
+
+.service-row:active, .slide-row:active {
+  background: var(--remote-pale) !important;
+}
+
+.service-row.current,
+.slide-row.current {
+  background: #E4E9E6 !important;
+  box-shadow: inset 4px 0 0 var(--remote-sage) !important;
+}
+
+.slide-thumb, .slide-thumb img {
+  background: #E3E7E5 !important;
+}
+
+.slide-end-marker {
+  background: var(--remote-cream) !important;
+  border-bottom-color: var(--remote-line) !important;
+  color: var(--remote-midgrey) !important;
+}
+
+.slide-end-marker:before, .slide-end-marker:after {
+  background: var(--remote-sage) !important;
+}
+
+#display-controls {
+  background: var(--remote-white) !important;
+  border-top-color: var(--remote-line) !important;
+  border-bottom-color: var(--remote-line) !important;
+}
+
+.display-btn {
+  background: var(--remote-white) !important;
+  color: #68736F !important;
+}
+
+.display-btn + .display-btn {
+  border-left-color: var(--remote-line) !important;
+}
+
+.display-btn:active {
+  background: var(--remote-pale) !important;
+}
+
+.display-btn.active-display {
+  background: var(--remote-sage) !important;
+  color: #202422 !important;
+}
+
+#sticky-footer, #tabbar, #status-row {
+  background: var(--remote-cream) !important;
+}
+
+#tabbar {
+  border-top-color: var(--remote-line) !important;
+}
+
+.tab {
+  color: #8A918E !important;
+}
+
+.active-tab {
+  color: #5F6965 !important;
+}
+
+#status-row {
+  color: #8A918E !important;
+  border-top-color: var(--remote-line) !important;
+}
+
+.settings-overlay {
+  background: rgba(90,96,93,.25) !important;
+}
+
+.settings-card, .settings-header, .settings-row, .font-size-setting,
+.help-section, .soundcraft-setting {
+  background: var(--remote-cream) !important;
+}
+
+.settings-header {
+  border-bottom-color: var(--remote-line) !important;
+}
+
+#settings-done, #font-size-value, .help-row strong, .help-icon,
+.soundcraft-actions button {
+  color: #68736F !important;
+}
+
+.settings-label small, .font-size-setting small, .help-title,
+.soundcraft-field > span, .soundcraft-note {
+  color: var(--remote-midgrey) !important;
+}
+
+.help-row {
+  border-top-color: var(--remote-line) !important;
+}
+
+.switch-track {
+  background: #CED5D1 !important;
+}
+
+.switch input:checked + .switch-track {
+  background: var(--remote-sage) !important;
+}
+
+.soundcraft-field select, .soundcraft-field input {
+  border-color: var(--remote-line) !important;
+  background: var(--remote-white) !important;
+}
+
+.soundcraft-actions button {
+  border-color: var(--remote-line) !important;
+  background: var(--remote-white) !important;
+}
+
+.soundcraft-status.connected, .recorder-tab.connected {
+  color: #68736F !important;
+}
+
+.recorder-tab.recording, .soundcraft-status.recording {
+  color: #B4232D !important;
+}
+
+@media screen and (orientation: landscape) {
+  html, body {
+    background: #D9DEDB !important;
+  }
+
+  #app {
+    box-shadow:
+      -8px 0 20px rgba(0,0,0,.10),
+       8px 0 20px rgba(0,0,0,.10) !important;
+  }
+}
+
+
+/* --------------------------------------------------------------------------
+   THEME LAYER
+
+   Edit theme.css to change the four main colours used by the remote.
+   Do not edit the values below; they intentionally reference theme.css.
+   -------------------------------------------------------------------------- */
+
+html,
+body,
+#app,
+#main,
+.screen,
+.ios-list {
+  background: var(--theme-background) !important;
+}
+
+#topbar {
+  background: var(--theme-header) !important;
+  color: var(--theme-header-text) !important;
+}
+
+#screen-title,
+.top-tool,
+.settings-btn,
+.nav-arrow {
+  color: var(--theme-header-text) !important;
+}
+
+.top-tool:active,
+.settings-btn:active,
+.nav-arrow:active {
+  background: rgba(255,255,255,.10) !important;
+}
+
+.service-row,
+.slide-row {
+  background: var(--theme-background) !important;
+}
+
+.service-row.current,
+.slide-row.current {
+  background: var(--theme-soft) !important;
+  box-shadow: inset 4px 0 0 var(--theme-accent) !important;
+}
+
+.slide-end-marker {
+  background: var(--theme-soft) !important;
+  color: #6F7673 !important;
+}
+
+.slide-end-marker:before,
+.slide-end-marker:after {
+  background: var(--theme-accent) !important;
+}
+
+#display-controls,
+#sticky-footer,
+#tabbar,
+#status-row,
+.settings-card,
+.settings-header,
+.settings-row,
+.font-size-setting,
+.help-section,
+.soundcraft-setting {
+  background: var(--theme-background) !important;
+}
+
+.display-btn,
+.active-tab,
+#settings-done,
+#font-size-value,
+.help-row strong,
+.help-icon,
+.soundcraft-actions button,
+.soundcraft-status.connected,
+.recorder-tab.connected {
+  color: var(--theme-accent) !important;
+}
+
+.display-btn.active-display {
+  background: var(--theme-accent) !important;
+  color: var(--theme-accent-text) !important;
+}
+
+.switch input:checked + .switch-track {
+  background: var(--theme-accent) !important;
+}
+
+@media screen and (orientation: landscape) {
+  html,
+  body {
+    background: var(--theme-header) !important;
+  }
+}
+
+
+/* Current slide emphasis
+   Colours come from theme.css.
+
+   Border mode is selected by the class on <html> in stage.html:
+   current-border-left = thick left edge only
+   current-border-all  = thick border on all four sides
+*/
+
+.slide-row.current {
+  background: var(--current-slide-fill) !important;
+}
+
+.current-border-left .slide-row.current {
+  box-shadow: inset var(--current-slide-border-width) 0 0 var(--current-slide-border) !important;
+  border-top: 0 !important;
+  border-right: 0 !important;
+  border-left: 0 !important;
+}
+
+.current-border-all .slide-row.current {
+  box-shadow: none !important;
+  border: var(--current-slide-border-width) solid var(--current-slide-border) !important;
+  box-sizing: border-box !important;
+}
+
+/* Service selection remains separate from slide emphasis. */
+.service-row.current {
+  background: var(--theme-soft) !important;
+  box-shadow: inset 4px 0 0 var(--theme-accent) !important;
+}
+
+
+/* Current slide text colour */
+.slide-row.current,
+.slide-row.current .slide-text {
+  color: var(--current-slide-text) !important;
+}

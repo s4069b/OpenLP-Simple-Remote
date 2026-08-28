@@ -1,0 +1,23 @@
+/*
+  OpenLP Simple Remote theme
+
+  Change the values in this file to recolour the remote.
+*/
+
+:root {
+  /* Main interface colours */
+  --theme-header: #A6B5B0;         /* header + landscape side gutters */
+  --theme-accent: #7D8581;         /* active controls + accents */
+  --theme-soft: #E4E9E6;           /* selected / secondary surfaces */
+  --theme-background: #F7F8F2;     /* main warm background */
+
+  /* Current slide emphasis */
+  --current-slide-fill: #577B6F;   /* shading behind the current slide */
+  --current-slide-text: #F7F8F2;   /* text colour on the current slide */
+  --current-slide-border: #7D8581; /* thick emphasis border colour */
+  --current-slide-border-width: 4px;
+
+  /* Normally leave these alone. */
+  --theme-header-text: #202321;
+  --theme-accent-text: #FFFFFF;
+}
