@@ -1324,3 +1324,1139 @@ body,
 .slide-row.current .slide-text {
   color: var(--current-slide-text) !important;
 }
+\n\n/* v1.1.8 Soundcraft USB recorder feedback */\n.recorder-tab {\n  position: relative;\n}\n.recorder-tab .recorder-icon-wrap {\n  position: relative;\n}\n.recorder-tab.usb-missing .recorder-icon-wrap:after {\n  content: "";\n  position: absolute;\n  left: 1px;\n  right: 1px;\n  top: 50%;\n  height: 2px;\n  background: currentColor;\n  -webkit-transform: rotate(-42deg);\n  transform: rotate(-42deg);\n  -webkit-transform-origin: center;\n  transform-origin: center;\n}\n.recorder-note {\n  display: block;\n  max-width: 104px;\n  margin: 1px auto 0;\n  font-size: 8px;\n  line-height: 1.05;\n  font-weight: 600;\n  white-space: normal;\n}\n.recorder-note[hidden] {\n  display: none !important;\n}\n.recorder-tab.usb-missing {\n  opacity: .72;\n}\n.theme-nerd-row {\n  margin-top: 10px;\n  border-top: 1px solid #d8d8dc;\n}\n
+
+/* v1.1.9 — clearer recorder availability + active mixer status */
+
+.recorder-tab.usb-missing {
+  opacity: 1 !important;
+  font-weight: 800 !important;
+  border: 2px solid currentColor !important;
+  border-radius: 8px;
+  margin: 2px 4px;
+  padding-left: 2px;
+  padding-right: 2px;
+}
+
+.recorder-tab.usb-missing .recorder-icon-wrap {
+  width: 28px;
+  height: 28px;
+  margin: 0 auto;
+}
+
+.recorder-tab.usb-missing .recorder-icon {
+  opacity: .28;
+}
+
+/* A large unmistakable X over the whole recorder icon. */
+.recorder-tab.usb-missing .recorder-icon-wrap:before,
+.recorder-tab.usb-missing .recorder-icon-wrap:after {
+  content: "";
+  position: absolute;
+  left: 1px;
+  right: 1px;
+  top: 13px;
+  height: 3px;
+  background: currentColor;
+  -webkit-transform-origin: center;
+  transform-origin: center;
+  z-index: 2;
+}
+.recorder-tab.usb-missing .recorder-icon-wrap:before {
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+.recorder-tab.usb-missing .recorder-icon-wrap:after {
+  -webkit-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+}
+
+
+
+
+
+/* v1.1.11 — compact footer status layout */
+#status-row {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: end;
+  -webkit-align-items: flex-end;
+  align-items: flex-end;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.status-left {
+  min-width: 0;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-align: start;
+  -webkit-align-items: flex-start;
+  align-items: flex-start;
+  line-height: 1.2;
+}
+
+#version-text {
+  margin-top: 2px;
+}
+
+.status-mixer {
+  margin-left: auto;
+  text-align: right;
+  white-space: nowrap;
+  font: inherit;
+  font-weight: inherit;
+  color: inherit;
+  line-height: 1.2;
+}
+
+.status-mixer[hidden] {
+  display: none !important;
+}
+
+
+/* v1.1.12 — authoritative Soundcraft/status overrides */
+#status-row {
+  -webkit-box-align: start !important;
+  -webkit-align-items: flex-start !important;
+  align-items: flex-start !important;
+}
+.status-mixer {
+  -webkit-align-self: flex-start !important;
+  align-self: flex-start !important;
+  margin-top: 0 !important;
+}
+
+/* Recording state: force a stable red indicator/button state.
+   These rules deliberately come last so earlier theme/tab rules cannot
+   temporarily paint the recorder with the normal green accent. */
+#soundcraft-record-btn.recording {
+  color: #b42318 !important;
+  border-color: #b42318 !important;
+}
+#soundcraft-record-btn.recording .recorder-icon,
+#soundcraft-record-btn.recording .recorder-dot,
+#soundcraft-record-btn.recording svg circle {
+  color: #b42318 !important;
+  fill: #b42318 !important;
+  background: #b42318 !important;
+  border-color: #b42318 !important;
+  opacity: 1 !important;
+}
+
+/* Missing/not-ready USB: make the X independent of the inner icon markup.
+   Draw it over the whole record tab, so it remains visible on old Safari. */
+#soundcraft-record-btn.usb-missing {
+  position: relative !important;
+  opacity: 1 !important;
+}
+#soundcraft-record-btn.usb-missing:before,
+#soundcraft-record-btn.usb-missing:after {
+  content: "" !important;
+  display: block !important;
+  position: absolute !important;
+  z-index: 20 !important;
+  left: 20% !important;
+  right: 20% !important;
+  top: 48% !important;
+  height: 4px !important;
+  background: #b42318 !important;
+  border-radius: 2px !important;
+  pointer-events: none !important;
+  -webkit-transform-origin: center !important;
+  transform-origin: center !important;
+}
+#soundcraft-record-btn.usb-missing:before {
+  -webkit-transform: rotate(38deg) !important;
+  transform: rotate(38deg) !important;
+}
+#soundcraft-record-btn.usb-missing:after {
+  -webkit-transform: rotate(-38deg) !important;
+  transform: rotate(-38deg) !important;
+}
+
+
+/* v1.1.13 — Soundcraft-style icon-only recorder */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+#soundcraft-record-btn {
+  position: relative !important;
+  min-height: 64px !important;
+  padding: 7px 18px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: inherit !important;
+  opacity: 1 !important;
+}
+
+/* Hide the previous remote artwork. */
+#soundcraft-record-btn .recorder-icon-wrap,
+#soundcraft-record-btn .recorder-icon,
+#soundcraft-record-btn .recorder-dot,
+#soundcraft-record-btn svg {
+  display: none !important;
+}
+
+/* Outer Soundcraft-style recorder key. */
+#soundcraft-record-btn:before {
+  content: "" !important;
+  display: block !important;
+  position: absolute !important;
+  z-index: 1 !important;
+  width: 54px !important;
+  height: 36px !important;
+  left: 50% !important;
+  top: 50% !important;
+  margin-left: -27px !important;
+  margin-top: -18px !important;
+  border-radius: 5px !important;
+  border: 2px solid rgba(70,74,72,.36) !important;
+  background: rgba(125,133,129,.23) !important;
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.25),
+    inset 0 -2px 4px rgba(0,0,0,.13) !important;
+  -webkit-transform: none !important;
+  transform: none !important;
+}
+
+/* Centre lamp. */
+#soundcraft-record-btn:after {
+  content: "" !important;
+  display: block !important;
+  position: absolute !important;
+  z-index: 2 !important;
+  width: 19px !important;
+  height: 19px !important;
+  left: 50% !important;
+  top: 50% !important;
+  margin-left: -9.5px !important;
+  margin-top: -9.5px !important;
+  border-radius: 50% !important;
+  pointer-events: none !important;
+  -webkit-transform: none !important;
+  transform: none !important;
+}
+
+/* No USB / not ready = shaded. */
+#soundcraft-record-btn.unavailable:before {
+  background: rgba(125,133,129,.20) !important;
+  border-color: rgba(70,74,72,.22) !important;
+}
+#soundcraft-record-btn.unavailable:after {
+  background: rgba(96,101,98,.30) !important;
+  box-shadow: inset 0 1px 2px rgba(255,255,255,.16) !important;
+}
+
+/* USB recorder ready = subdued red lamp, matching the mixer control. */
+#soundcraft-record-btn.ready:after {
+  background: #8d4641 !important;
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.16),
+    0 0 0 1px rgba(82,28,25,.14) !important;
+}
+
+/* Recording = bright red lamp. */
+#soundcraft-record-btn.recording:after {
+  background: #d92b21 !important;
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.28),
+    0 0 6px rgba(217,43,33,.72) !important;
+}
+
+/* Old Safari normally fades disabled buttons; keep our shaded state exact. */
+#soundcraft-record-btn:disabled {
+  opacity: 1 !important;
+  -webkit-appearance: none !important;
+}
+
+
+/* v1.1.14 — actual Soundcraft recorder artwork + compact mixer footer */
+#soundcraft-record-btn {
+  position: relative !important;
+  min-height: 58px !important;
+  padding: 6px 10px !important;
+  border: 0 !important;
+  background: transparent !important;
+  opacity: 1 !important;
+  -webkit-appearance: none !important;
+}
+
+/* Remove all generated v1.1.12/v1.1.13 pseudo artwork. */
+#soundcraft-record-btn:before,
+#soundcraft-record-btn:after,
+#soundcraft-record-btn.unavailable:before,
+#soundcraft-record-btn.unavailable:after,
+#soundcraft-record-btn.ready:before,
+#soundcraft-record-btn.ready:after,
+#soundcraft-record-btn.recording:before,
+#soundcraft-record-btn.recording:after {
+  content: none !important;
+  display: none !important;
+}
+
+.soundcraft-record-image {
+  display: block !important;
+  width: 48px !important;
+  height: auto !important;
+  max-height: 36px !important;
+  margin: 0 auto !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  opacity: 1 !important;
+}
+
+#soundcraft-record-btn:disabled,
+#soundcraft-record-btn.unavailable {
+  opacity: 1 !important;
+}
+
+.status-mixer-block {
+  margin-left: auto;
+  text-align: right;
+  white-space: nowrap;
+  line-height: 1.15;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-align: end;
+  -webkit-align-items: flex-end;
+  align-items: flex-end;
+}
+
+.status-mixer-block[hidden] {
+  display: none !important;
+}
+
+.change-mixer-link {
+  margin: 2px 0 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 0.9em;
+  line-height: 1.1;
+  text-decoration: underline;
+  cursor: pointer;
+  opacity: .85;
+  -webkit-appearance: none;
+}
+
+.mixer-icon-help {
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+}
+
+.help-recorder-icon {
+  display: block;
+  width: 42px;
+  height: auto;
+  -webkit-flex: 0 0 auto;
+  flex: 0 0 auto;
+  margin-right: 8px;
+  border: 0;
+}
+
+
+/* v1.1.15 — 3-second confirmation before stopping a recording */
+.soundcraft-stop-confirm {
+  box-sizing: border-box;
+  display: block;
+  width: 48px;
+  height: 36px;
+  margin: 0 auto;
+  border: 1px solid rgba(110,18,14,.95);
+  border-radius: 5px;
+  background: #d92b21;
+  color: #ffffff;
+  font-size: 9px;
+  line-height: 34px;
+  font-weight: 800;
+  letter-spacing: .25px;
+  text-align: center;
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.25),
+    0 0 5px rgba(217,43,33,.45);
+}
+
+.soundcraft-stop-confirm[hidden] {
+  display: none !important;
+}
+
+.soundcraft-record-image[hidden] {
+  display: none !important;
+}
+
+
+/* v1.1.16 — compact recorder icon matching Service/Slides */
+#soundcraft-record-btn {
+  min-height: 60px !important;
+  padding: 4px 8px 3px !important;
+  justify-content: center !important;
+}
+
+.soundcraft-record-image {
+  display: block !important;
+  width: 34px !important;
+  height: 27px !important;
+  object-fit: fill !important;
+  margin: 0 auto 2px !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.soundcraft-record-label {
+  display: block !important;
+  font-size: 11px !important;
+  line-height: 1.05 !important;
+  font-weight: normal !important;
+  color: inherit !important;
+  margin: 0 !important;
+}
+
+.soundcraft-stop-confirm {
+  width: 34px !important;
+  height: 27px !important;
+  line-height: 25px !important;
+  margin: 0 auto 2px !important;
+  font-size: 7px !important;
+}
+
+/* The switch control is an action now, not a settings hyperlink. */
+.change-mixer-link {
+  text-decoration: underline;
+}
+
+
+/* v1.1.17 — final recorder polish */
+
+/* Recorder tab typography must exactly follow the other footer tabs. */
+#soundcraft-record-btn,
+#soundcraft-record-btn.ready,
+#soundcraft-record-btn.recording,
+#soundcraft-record-btn.unavailable {
+  color: var(--theme-accent) !important;
+  font-size: 11px !important;
+  font-weight: normal !important;
+}
+
+#soundcraft-record-label {
+  display: block !important;
+  margin: 0 !important;
+  color: var(--theme-accent) !important;
+  font: inherit !important;
+  font-size: 11px !important;
+  font-weight: normal !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  text-decoration: none !important;
+}
+
+/* Clean, distortion-free recorder icon drawn to match the Service/Slides footprint. */
+.soundcraft-record-icon {
+  box-sizing: border-box !important;
+  position: relative !important;
+  display: block !important;
+  width: 30px !important;
+  height: 22px !important;
+  margin: 0 auto 3px !important;
+  border: 2px solid currentColor !important;
+  border-radius: 4px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.soundcraft-record-core {
+  box-sizing: border-box !important;
+  position: absolute !important;
+  display: block !important;
+  width: 10px !important;
+  height: 10px !important;
+  left: 50% !important;
+  top: 50% !important;
+  margin-left: -5px !important;
+  margin-top: -5px !important;
+  border-radius: 50% !important;
+  border: 2px solid currentColor !important;
+  background: transparent !important;
+}
+
+/* No USB / disconnected: green, subdued, but clearly available as a status icon. */
+#soundcraft-record-btn.unavailable .soundcraft-record-icon {
+  color: var(--theme-accent) !important;
+  opacity: .52 !important;
+  background: var(--theme-soft) !important;
+}
+#soundcraft-record-btn.unavailable .soundcraft-record-core {
+  background: transparent !important;
+}
+
+/* Ready: same green key with a restrained red record dot. */
+#soundcraft-record-btn.ready .soundcraft-record-icon {
+  color: var(--theme-accent) !important;
+  opacity: 1 !important;
+  background: transparent !important;
+}
+#soundcraft-record-btn.ready .soundcraft-record-core {
+  border-color: #9a3f39 !important;
+  background: #9a3f39 !important;
+}
+
+/* Recording: red key + filled red centre, but Record text stays green. */
+#soundcraft-record-btn.recording .soundcraft-record-icon {
+  color: #c72f27 !important;
+  opacity: 1 !important;
+  background: rgba(199,47,39,.10) !important;
+}
+#soundcraft-record-btn.recording .soundcraft-record-core {
+  border-color: #c72f27 !important;
+  background: #c72f27 !important;
+}
+#soundcraft-record-btn.recording #soundcraft-record-label {
+  color: var(--theme-accent) !important;
+}
+
+/* The first stop tap swaps only the icon area for a same-footprint confirm key. */
+.soundcraft-stop-confirm {
+  box-sizing: border-box !important;
+  display: block !important;
+  width: 38px !important;
+  height: 22px !important;
+  margin: 0 auto 3px !important;
+  padding: 0 !important;
+  border: 1px solid #9e211a !important;
+  border-radius: 4px !important;
+  background: #c72f27 !important;
+  color: #fff !important;
+  font-family: inherit !important;
+  font-size: 6.5px !important;
+  line-height: 20px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0 !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  box-shadow: none !important;
+}
+.soundcraft-stop-confirm[hidden],
+.soundcraft-record-icon[hidden] {
+  display: none !important;
+}
+
+/* Change Mixer: centred directly beneath the mixer label, not right-justified. */
+.status-mixer-block {
+  -webkit-box-align: start !important;
+  -webkit-align-items: flex-start !important;
+  align-items: flex-start !important;
+  text-align: left !important;
+}
+.change-mixer-link {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  margin: 2px 0 0 !important;
+  padding: 0 !important;
+  text-align: center !important;
+  color: inherit !important;
+  font: inherit !important;
+  font-size: .9em !important;
+  line-height: 1.1 !important;
+  text-decoration: underline !important;
+}
+
+/* Help uses the same clean recorder symbols rather than screenshot crops. */
+.help-recorder-icon {
+  box-sizing: border-box !important;
+  position: relative !important;
+  display: inline-block !important;
+  width: 34px !important;
+  height: 24px !important;
+  margin-right: 10px !important;
+  border: 2px solid var(--theme-accent) !important;
+  border-radius: 4px !important;
+  background: transparent !important;
+  -webkit-flex: 0 0 34px !important;
+  flex: 0 0 34px !important;
+}
+.help-recorder-icon > span {
+  position: absolute !important;
+  width: 10px !important;
+  height: 10px !important;
+  left: 50% !important;
+  top: 50% !important;
+  margin-left: -5px !important;
+  margin-top: -5px !important;
+  border-radius: 50% !important;
+  border: 2px solid var(--theme-accent) !important;
+}
+.help-recorder-unavailable {
+  opacity: .52 !important;
+  background: var(--theme-soft) !important;
+}
+.help-recorder-ready > span {
+  border-color: #9a3f39 !important;
+  background: #9a3f39 !important;
+}
+.help-recorder-recording {
+  border-color: #c72f27 !important;
+  background: rgba(199,47,39,.10) !important;
+}
+.help-recorder-recording > span {
+  border-color: #c72f27 !important;
+  background: #c72f27 !important;
+}
+
+
+/* v1.1.18 — finished top-bar icons and exact Help mirrors */
+.settings-btn,
+#browser-refresh-btn {
+  display: -webkit-box !important;
+  display: -webkit-flex !important;
+  display: flex !important;
+  -webkit-box-align: center !important;
+  -webkit-align-items: center !important;
+  align-items: center !important;
+  -webkit-box-pack: center !important;
+  -webkit-justify-content: center !important;
+  justify-content: center !important;
+  color: var(--theme-header-text) !important;
+}
+
+.top-icon {
+  display: block !important;
+  width: 24px !important;
+  height: 24px !important;
+  fill: none !important;
+  stroke: currentColor !important;
+  stroke-width: 1.8 !important;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+}
+
+.refresh-icon {
+  width: 23px !important;
+  height: 23px !important;
+}
+
+/* Help top icons are literally the same drawings, just scaled to help-row size. */
+.help-top-icon {
+  display: block !important;
+  width: 23px !important;
+  height: 23px !important;
+  margin: 0 auto !important;
+  fill: none !important;
+  stroke: var(--theme-accent) !important;
+  stroke-width: 1.8 !important;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+}
+
+/* Help recorder examples now reuse the footer recorder structure. */
+.help-record-button {
+  display: -webkit-box !important;
+  display: -webkit-flex !important;
+  display: flex !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-box-direction: normal !important;
+  -webkit-flex-direction: column !important;
+  flex-direction: column !important;
+  -webkit-box-align: center !important;
+  -webkit-align-items: center !important;
+  align-items: center !important;
+  -webkit-box-pack: center !important;
+  -webkit-justify-content: center !important;
+  justify-content: center !important;
+  width: 54px !important;
+  min-width: 54px !important;
+  margin-right: 8px !important;
+  color: var(--theme-accent) !important;
+}
+
+.help-record-button .soundcraft-record-icon {
+  width: 30px !important;
+  height: 22px !important;
+  margin: 0 auto 3px !important;
+}
+
+.help-record-label {
+  display: block !important;
+  color: var(--theme-accent) !important;
+  font-size: 11px !important;
+  font-weight: normal !important;
+  line-height: 1 !important;
+}
+
+.help-record-button.unavailable .soundcraft-record-icon {
+  color: var(--theme-accent) !important;
+  opacity: .52 !important;
+  background: var(--theme-soft) !important;
+}
+.help-record-button.unavailable .soundcraft-record-core {
+  background: transparent !important;
+}
+
+.help-record-button.ready .soundcraft-record-icon {
+  color: var(--theme-accent) !important;
+  opacity: 1 !important;
+  background: transparent !important;
+}
+.help-record-button.ready .soundcraft-record-core {
+  border-color: #9a3f39 !important;
+  background: #9a3f39 !important;
+}
+
+.help-record-button.recording .soundcraft-record-icon {
+  color: #c72f27 !important;
+  opacity: 1 !important;
+  background: rgba(199,47,39,.10) !important;
+}
+.help-record-button.recording .soundcraft-record-core {
+  border-color: #c72f27 !important;
+  background: #c72f27 !important;
+}
+.help-record-button.recording .help-record-label {
+  color: var(--theme-accent) !important;
+}
+
+/* Help CONFIRM is the same dimensions and type treatment as the live button. */
+.help-confirm-button {
+  box-sizing: border-box !important;
+  display: inline-block !important;
+  width: 38px !important;
+  height: 22px !important;
+  margin: 0 16px 0 0 !important;
+  padding: 0 !important;
+  border: 1px solid #9e211a !important;
+  border-radius: 4px !important;
+  background: #c72f27 !important;
+  color: #fff !important;
+  font-family: inherit !important;
+  font-size: 6.5px !important;
+  line-height: 20px !important;
+  font-weight: 700 !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  -webkit-flex: 0 0 38px !important;
+  flex: 0 0 38px !important;
+}
+
+
+/* v1.1.19 — cleaner settings gear */
+.settings-gear-icon {
+  width: 22px !important;
+  height: 22px !important;
+  stroke-width: 1.45 !important;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+}
+
+.settings-btn .settings-gear-icon {
+  color: var(--theme-header-text) !important;
+}
+
+.help-top-icon.settings-gear-icon {
+  width: 22px !important;
+  height: 22px !important;
+  stroke: var(--theme-accent) !important;
+}
+
+
+/* v1.1.20 — iOS-style Settings gear */
+.settings-btn {
+  overflow: visible !important;
+}
+
+.settings-gear-icon {
+  width: 23px !important;
+  height: 23px !important;
+  overflow: visible !important;
+  fill: none !important;
+  stroke: currentColor !important;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+}
+
+.settings-gear-teeth {
+  stroke-width: 2.25 !important;
+}
+
+.settings-gear-ring {
+  stroke-width: 2.15 !important;
+}
+
+.settings-gear-hole {
+  stroke-width: 1.8 !important;
+}
+
+.settings-btn .settings-gear-icon {
+  color: var(--theme-header-text) !important;
+  margin: 0 !important;
+}
+
+.help-top-icon.settings-gear-icon {
+  width: 23px !important;
+  height: 23px !important;
+  overflow: visible !important;
+  stroke: var(--theme-accent) !important;
+}
+
+
+/* v1.1.21 — Help alignment + consistent nerd notes */
+.help-record-slot {
+  display: -webkit-box !important;
+  display: -webkit-flex !important;
+  display: flex !important;
+  width: 54px !important;
+  min-width: 54px !important;
+  margin-right: 8px !important;
+  -webkit-box-align: center !important;
+  -webkit-align-items: center !important;
+  align-items: center !important;
+  -webkit-box-pack: center !important;
+  -webkit-justify-content: center !important;
+  justify-content: center !important;
+  -webkit-flex: 0 0 54px !important;
+  flex: 0 0 54px !important;
+}
+
+.help-record-slot .help-confirm-button {
+  margin: 0 !important;
+}
+
+.nerd-note-row {
+  font-family: inherit !important;
+  font-size: inherit !important;
+  font-weight: normal !important;
+}
+
+.nerd-note-row > strong {
+  font-family: inherit !important;
+  font-size: inherit !important;
+  font-weight: 600 !important;
+}
+
+.nerd-note-row > span {
+  font-family: inherit !important;
+  font-size: inherit !important;
+  font-weight: normal !important;
+}
+
+.nerd-note-row code {
+  font-family: inherit !important;
+  font-size: inherit !important;
+  font-weight: 600 !important;
+  background: rgba(0,0,0,.045) !important;
+  border-radius: 3px !important;
+  padding: 0 2px !important;
+}
+
+.nerd-note-label {
+  font-family: inherit !important;
+  font-size: inherit !important;
+  font-weight: 600 !important;
+}
+
+
+/* v1.2 — final Help and settings polish */
+.final-help-section,
+.nerd-notes {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+  color: #4f5653 !important;
+}
+
+.final-help-section {
+  margin-top: 12px !important;
+  padding-top: 12px !important;
+  border-top: 1px solid #d8d8dc !important;
+}
+
+.final-help-section .help-title,
+.nerd-notes-title {
+  margin: 0 0 8px !important;
+  color: var(--theme-header-text) !important;
+  font-family: inherit !important;
+  font-size: 13px !important;
+  line-height: 1.2 !important;
+  font-weight: 600 !important;
+}
+
+.help-subtitle {
+  margin: 12px 0 4px !important;
+  color: var(--theme-header-text) !important;
+  font-family: inherit !important;
+  font-size: 12px !important;
+  line-height: 1.2 !important;
+  font-weight: 600 !important;
+}
+
+.final-help-row {
+  box-sizing: border-box !important;
+  display: -webkit-box !important;
+  display: -webkit-flex !important;
+  display: flex !important;
+  min-height: 48px !important;
+  padding: 7px 0 !important;
+  border: 0 !important;
+  -webkit-box-align: center !important;
+  -webkit-align-items: center !important;
+  align-items: center !important;
+  font-family: inherit !important;
+  font-size: 12px !important;
+  line-height: 1.35 !important;
+  font-weight: 400 !important;
+  color: #4f5653 !important;
+}
+
+.final-help-row + .final-help-row {
+  border-top: 1px solid rgba(0,0,0,.055) !important;
+}
+
+.help-control {
+  box-sizing: border-box !important;
+  display: -webkit-box !important;
+  display: -webkit-flex !important;
+  display: flex !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-box-direction: normal !important;
+  -webkit-flex-direction: column !important;
+  flex-direction: column !important;
+  -webkit-box-align: center !important;
+  -webkit-align-items: center !important;
+  align-items: center !important;
+  -webkit-box-pack: center !important;
+  -webkit-justify-content: center !important;
+  justify-content: center !important;
+  -webkit-flex: 0 0 76px !important;
+  flex: 0 0 76px !important;
+  width: 76px !important;
+  min-width: 76px !important;
+  min-height: 34px !important;
+  margin: 0 10px 0 0 !important;
+  padding: 0 !important;
+  color: var(--theme-accent) !important;
+  font-family: inherit !important;
+  font-size: 11px !important;
+  line-height: 1 !important;
+  font-weight: 400 !important;
+  text-align: center !important;
+}
+
+.help-control-label {
+  display: block !important;
+  margin-top: 3px !important;
+  color: var(--theme-accent) !important;
+  font-family: inherit !important;
+  font-size: 11px !important;
+  line-height: 1 !important;
+  font-weight: 400 !important;
+  text-align: center !important;
+}
+
+.help-copy {
+  display: block !important;
+  -webkit-flex: 1 1 auto !important;
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  color: #4f5653 !important;
+  font-family: inherit !important;
+  font-size: 12px !important;
+  line-height: 1.35 !important;
+  font-weight: 400 !important;
+}
+
+.help-copy-title {
+  color: #3f4542 !important;
+  font-family: inherit !important;
+  font-size: inherit !important;
+  font-weight: 600 !important;
+}
+
+.help-text-control {
+  min-height: 28px !important;
+  color: var(--theme-accent) !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+}
+
+.help-change-mixer {
+  text-decoration: underline !important;
+  white-space: normal !important;
+  line-height: 1.1 !important;
+}
+
+.final-help-section .help-top-icon,
+.final-help-section .settings-gear-icon {
+  width: 23px !important;
+  height: 23px !important;
+  margin: 0 !important;
+  color: var(--theme-accent) !important;
+  stroke: currentColor !important;
+}
+
+.help-nav-icons {
+  display: -webkit-box !important;
+  display: -webkit-flex !important;
+  display: flex !important;
+  -webkit-box-align: center !important;
+  -webkit-align-items: center !important;
+  align-items: center !important;
+  -webkit-box-pack: center !important;
+  -webkit-justify-content: center !important;
+  justify-content: center !important;
+  height: 23px !important;
+}
+
+.help-nav-icons .icon-svg {
+  width: 18px !important;
+  height: 18px !important;
+  stroke: var(--theme-accent) !important;
+}
+
+.help-tab-symbol {
+  display: block !important;
+  height: 23px !important;
+  color: var(--theme-accent) !important;
+  font-family: inherit !important;
+  font-size: 25px !important;
+  line-height: 21px !important;
+  font-weight: 400 !important;
+}
+
+.final-help-section .help-record-button {
+  width: 42px !important;
+  min-width: 42px !important;
+  margin: 0 !important;
+  color: var(--theme-accent) !important;
+}
+
+.final-help-section .help-record-button .soundcraft-record-icon {
+  width: 30px !important;
+  height: 22px !important;
+  margin: 0 auto !important;
+}
+
+.final-help-section .help-record-button .help-control-label {
+  margin-top: 3px !important;
+}
+
+.final-help-section .help-confirm-button {
+  box-sizing: border-box !important;
+  display: block !important;
+  width: 42px !important;
+  height: 22px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 1px solid #9e211a !important;
+  border-radius: 4px !important;
+  background: #c72f27 !important;
+  color: #fff !important;
+  font-family: inherit !important;
+  font-size: 6.5px !important;
+  line-height: 20px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0 !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  -webkit-flex: 0 0 auto !important;
+  flex: 0 0 auto !important;
+}
+
+.nerd-notes {
+  margin-top: 14px !important;
+  padding-top: 12px !important;
+  border-top: 1px solid #d8d8dc !important;
+}
+
+.nerd-note-item {
+  display: -webkit-box !important;
+  display: -webkit-flex !important;
+  display: flex !important;
+  padding: 5px 0 !important;
+  font-family: inherit !important;
+  font-size: 11px !important;
+  line-height: 1.35 !important;
+  font-weight: 400 !important;
+  color: #626966 !important;
+}
+
+.nerd-note-heading {
+  -webkit-flex: 0 0 58px !important;
+  flex: 0 0 58px !important;
+  width: 58px !important;
+  color: var(--theme-accent) !important;
+  font-family: inherit !important;
+  font-size: 11px !important;
+  line-height: inherit !important;
+  font-weight: 600 !important;
+}
+
+.nerd-note-copy {
+  -webkit-flex: 1 1 auto !important;
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  color: #626966 !important;
+  font-family: inherit !important;
+  font-size: 11px !important;
+  line-height: inherit !important;
+  font-weight: 400 !important;
+}
+
+.nerd-note-copy code,
+.soundcraft-note code {
+  font-family: inherit !important;
+  font-size: inherit !important;
+  line-height: inherit !important;
+  font-weight: 600 !important;
+  color: inherit !important;
+  background: rgba(0,0,0,.045) !important;
+  border-radius: 3px !important;
+  padding: 0 2px !important;
+}
+
+/* Keep the live Record label exactly in step with Service/Slides. */
+#soundcraft-record-label,
+#soundcraft-record-btn.recording #soundcraft-record-label,
+#soundcraft-record-btn.ready #soundcraft-record-label,
+#soundcraft-record-btn.unavailable #soundcraft-record-label {
+  color: var(--theme-accent) !important;
+  font-family: inherit !important;
+  font-size: 11px !important;
+  line-height: 1 !important;
+  font-weight: 400 !important;
+}
+
+/* Keep Change Mixer centred beneath the mixer status block. */
+.status-mixer-block {
+  -webkit-box-align: stretch !important;
+  -webkit-align-items: stretch !important;
+  align-items: stretch !important;
+}
+.change-mixer-link {
+  width: 100% !important;
+  text-align: center !important;
+}

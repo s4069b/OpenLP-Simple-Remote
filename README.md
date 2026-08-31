@@ -1,97 +1,76 @@
 # OpenLP Simple Remote
 
-Unofficial community remote for OpenLP. Not affiliated with or endorsed by the OpenLP project.
+A lightweight, portrait-first web remote for OpenLP. It is designed to stay simple, work well on older Safari/WebKit devices, and provide the presentation controls needed during a service without trying to reproduce the full OpenLP web interface.
 
-A lightweight, portrait-first web remote for OpenLP, designed to work well on older iPads and phones while keeping presentation controls deliberately simple.
-
-**This is an unofficial community project and is not part of OpenLP itself.**
+**This is an unofficial community project and is not part of or endorsed by OpenLP.**
 
 ## Features
 
-- Separate **Service** and **Slides** screens inspired by the older OpenLP iOS remote.
-- Tap a service item to make it live.
-- Optional automatic switch to **Slides** after selecting a service item.
-- Tap any slide to make it live.
+- Separate **Service** and **Slides** screens.
+- Tap a service item or slide to make it live.
+- Optional automatic move to **Slides** after selecting a service item.
 - Preserves song and Bible-reading line breaks supplied by OpenLP.
-- Shows image previews where OpenLP provides usable thumbnails.
-- **Blank** and **Show** presentation controls.
+- Uses image thumbnails where OpenLP supplies a usable image.
+- **Blank** and **Show** controls.
 - Previous/next service-item controls.
-- Sticky app header and footer with a scrollable service/slide area.
-- Highlights the current slide and gently returns it to view after manual browsing.
+- Sticky header/footer with a scrollable service/slide area.
+- Current-slide highlighting with gentle return after manual browsing.
 - `-- END --` marker after the final slide.
-- Font-size choices: **85%, 100%, 115%, 130%, 145%**; default **115%**.
-- Portrait-first layout; landscape uses a centred narrow app window rather than stretching across the screen.
-- Optional experimental Soundcraft Ui12/Ui16 recorder control, disabled by default.
-- Plain HTML, CSS and ES5-style JavaScript for compatibility with older Safari/WebKit.
-- No framework or build step.
+- List font sizes: **85%, 100%, 115%, 130%, 145%**; default **115%**.
+- Portrait-first layout; landscape keeps a centred narrow remote rather than stretching full-width.
+- Optional offline Soundcraft Ui12/Ui16 2-track USB recorder control.
+- Multiple saved mixers, footer mixer cycling, and a 3-second confirmation before stopping a recording.
+- Plain HTML, CSS and ES5-style JavaScript; no framework, package manager or build step.
 
 ## Requirements
 
 - OpenLP 3.x with its built-in web/remote server enabled.
-- Developed and tested against OpenLP 3.1.7.
-- Core remote functionality has been tested on an iPad 4 running iOS 10.3.4.
+- Developed against OpenLP 3.1.7.
+- Core remote behaviour has also been exercised on older Safari/WebKit, including iOS 10.3.4.
 
 ## Installation
 
 1. In OpenLP choose **Tools → Open Data Folder**.
 2. Open or create the `stages` folder.
-3. Copy the entire `openlp-simple-remote` folder into `stages`.
-4. Open the remote in a browser at:
+3. Copy the included `remote` folder into `stages`.
+4. Browse to:
 
-   `http://OPENLP-IP:4316/stage/openlp-simple-remote/`
+   `http://OPENLP-IP:4316/stage/remote/`
 
-Replace `OPENLP-IP` with the IP address or hostname of the computer running OpenLP.
+Replace `OPENLP-IP` with the address of the computer running OpenLP.
 
-## Controls
+## Controls and settings
 
-The header contains **Settings**, browser **Reload**, and previous/next service-item controls.
+The header contains **Settings**, **Refresh**, and previous/next service-item controls.
 
-The footer contains **Blank**, **Show**, **Service**, and **Slides**.
+The footer contains **Blank**, **Show**, **Service**, **Slides**, and—when enabled—the **Record** control.
 
-### Settings
+**Open Slides after selecting a service item** is enabled by default. **List Font Size** changes service-item and slide text. Preferences are stored in the browser/device.
 
-**Open Slides after selecting a service item** is ON by default. When enabled, selecting a service item makes it live and moves directly to its Slides screen.
+Slide taps are sent serially to OpenLP so a quick second selection is retained instead of being silently discarded while a previous slide request is still in flight.
 
-**List Font Size** offers 85%, 100%, 115%, 130% and 145%. The default is 115%. This also scales the main footer labels.
+## Soundcraft recorder
 
-Preferences are stored in that browser/device.
+The optional Soundcraft recorder is disabled by default. It talks directly to a Soundcraft Ui12/Ui16 on the local network and does not require an internet connection.
 
-## Slide scrolling
+When enabled, Settings can add, edit and remove mixers. Only the selected mixer is controlled at a time. **Change Mixer** in the footer steps through the saved mixer list and loops back to the first.
 
-The Slides view is designed for live presentation use. The current slide has first priority and is kept fully visible where possible. The next slide is also kept visible where space permits, with `-- END --` treated as the next slide after the final real slide.
+The Record control shows recorder state visually and in the footer status. Stopping is deliberately two-step: the first tap shows **CONFIRM** for three seconds; a second tap within that window stops the recording.
 
-You can manually scroll away from the live slide to inspect or select another slide. After about one second without further manual scrolling, the view gently returns to the current slide. Selecting another slide or receiving a new current-slide state from OpenLP immediately takes priority.
+Built-in defaults are defined in `window.OPENLP_DEFAULT_MIXERS` near the bottom of `stage.html`. The GitHub build ships with an empty default list; add your own defaults there if desired. Mixer changes made in Settings are saved in the browser and take precedence.
 
-## Optional Soundcraft recorder
+## Theme
 
-Settings contains an optional **Soundcraft Recorder** extension for Ui12 and Ui16 mixers. It is disabled by default.
-
-When enabled you can save multiple mixer names and IP addresses/hostnames, select the active mixer, and the browser remembers the last-used mixer. A **Mixer Record** control then appears beside Service and Slides.
-
-The recorder integration should currently be considered **experimental until verified against physical Ui12/Ui16 hardware**. The optional Soundcraft module is not loaded while the feature is disabled, preserving compatibility with older browsers for normal OpenLP use.
-
-The current experimental recorder module uses the MIT-licensed `soundcraft-ui-connection` browser module and therefore requires internet access as well as LAN access to the mixer.
-
-
-## Changing colours
-
-All four main interface colours are kept in one file: `theme.css`.
-
-Edit only these variables:
+Edit `theme.css` to change the main interface colours:
 
 ```css
---theme-header       /* header and landscape side gutters */
---theme-accent       /* active controls and accents */
---theme-soft         /* selected and secondary surfaces */
---theme-background   /* main warm background */
+--theme-header
+--theme-accent
+--theme-soft
+--theme-background
 ```
 
-The remote also includes `favicon.png` and `apple-touch-icon.png` for browsers and iPad home-screen bookmarks.
-
-
-### Current slide emphasis
-
-`theme.css` also controls the current slide:
+Current-slide emphasis is controlled by:
 
 ```css
 --current-slide-fill
@@ -100,23 +79,9 @@ The remote also includes `favicon.png` and `apple-touch-icon.png` for browsers a
 --current-slide-border-width
 ```
 
-To choose the border style, edit the opening `<html>` line in `stage.html`.
+The opening `<html>` line in `stage.html` chooses either `current-border-left` or `current-border-all`.
 
-For a thick left edge only:
-
-```html
-<html class="current-border-left">
-```
-
-For the same thick emphasis on all four sides:
-
-```html
-<html class="current-border-all">
-```
-
-This is intentionally a simple one-word edit so it remains compatible with older Safari/iOS.
-
-## Project files
+## Files
 
 Runtime files:
 
@@ -124,11 +89,11 @@ Runtime files:
 - `theme.css`
 - `remote.css`
 - `remote.js`
-- `soundcraft.mjs`
+- `soundcraft.js`
 - `favicon.png`
 - `apple-touch-icon.png`
 
-There is no package manager, transpiler, framework or build command.
+There is no compilation or build command.
 
 ## License
 

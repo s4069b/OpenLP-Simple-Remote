@@ -17,17 +17,27 @@
   <header id="topbar">
     <div id="left-tools">
       <button id="settings-btn" class="top-tool" aria-label="Settings" title="Settings">
-        <svg class="icon-svg gear-icon" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 8.2a3.8 3.8 0 1 0 0 7.6 3.8 3.8 0 0 0 0-7.6Z"/>
-          <path d="M19.2 13.6c.08-.52.08-1.08 0-1.6l2-1.55-1.9-3.3-2.45.98a8.1 8.1 0 0 0-1.4-.8L15.1 4.7h-3.8l-.37 2.63c-.5.2-.97.47-1.4.8l-2.45-.98-1.9 3.3L7.2 12a8.5 8.5 0 0 0 0 1.6l-2.02 1.55 1.9 3.3 2.45-.98c.43.33.9.6 1.4.8l.37 2.63h3.8l.37-2.63c.5-.2.97-.47 1.4-.8l2.45.98 1.9-3.3-2.02-1.55Z"/>
-        </svg>
-      </button>
+      <svg class="top-icon settings-gear-icon" viewBox="0 0 24 24" aria-hidden="true">
+        <g class="settings-gear-teeth">
+          <line x1="12" y1="2.8" x2="12" y2="5.2"></line>
+          <line x1="12" y1="18.8" x2="12" y2="21.2"></line>
+          <line x1="2.8" y1="12" x2="5.2" y2="12"></line>
+          <line x1="18.8" y1="12" x2="21.2" y2="12"></line>
+          <line x1="5.5" y1="5.5" x2="7.2" y2="7.2"></line>
+          <line x1="16.8" y1="16.8" x2="18.5" y2="18.5"></line>
+          <line x1="18.5" y1="5.5" x2="16.8" y2="7.2"></line>
+          <line x1="7.2" y1="16.8" x2="5.5" y2="18.5"></line>
+        </g>
+        <circle class="settings-gear-ring" cx="12" cy="12" r="6.1"></circle>
+        <circle class="settings-gear-hole" cx="12" cy="12" r="2.5"></circle>
+      </svg>
+    </button>
       <button id="browser-refresh-btn" class="top-tool" aria-label="Reload remote" title="Reload remote">
-        <svg class="icon-svg refresh-icon" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M20 11a8 8 0 1 0-2.35 5.65"/>
-          <path d="M20 5v6h-6"/>
-        </svg>
-      </button>
+      <svg class="top-icon refresh-icon" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M20 6v5h-5"></path>
+        <path d="M19.2 11A7.5 7.5 0 1 0 20 15"></path>
+      </svg>
+    </button>
     </div>
     <div id="screen-title">Service</div>
     <div id="item-nav">
@@ -65,17 +75,21 @@
       <span class="tab-icon">▱</span>
       <span>Slides</span>
     </button>
-    <button id="soundcraft-record-btn" class="tab recorder-tab" title="Soundcraft mixer recorder" hidden>
-      <span class="tab-icon recorder-icon-wrap">
-        <svg class="recorder-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="6"></circle></svg>
-      </span>
-      <span id="soundcraft-record-label">Mixer Record</span>
+    <button id="soundcraft-record-btn" class="tab recorder-tab" type="button" aria-label="Mixer recorder" title="Mixer recorder" hidden>
+      <span id="soundcraft-record-icon" class="soundcraft-record-icon" aria-hidden="true"><span class="soundcraft-record-core"></span></span>
+      <span id="soundcraft-stop-confirm" class="soundcraft-stop-confirm" hidden>CONFIRM</span>
+      <span id="soundcraft-record-label" class="soundcraft-record-label">Record</span>
     </button>
   </nav>
-
   <div id="status-row">
-    <span id="state-text">Connecting…</span>
-    <span id="version-text">v1.1.0</span>
+    <div class="status-left">
+      <span id="state-text">Connecting…</span>
+      <span id="version-text">v1.2</span>
+    </div>
+    <div id="soundcraft-mixer-block" class="status-mixer-block" hidden>
+      <span id="soundcraft-mixer-info" class="status-mixer">Mixer: —</span>
+      <button id="change-mixer-btn" class="change-mixer-link" type="button">Change Mixer</button>
+    </div>
   </div>
   </footer>
 
@@ -103,7 +117,7 @@
         <small>Changes service-item and slide text size.</small>
       </div>
 
-      <div class="soundcraft-setting">
+      <div id="soundcraft-setting" class="soundcraft-setting">
         <div class="font-size-heading">
           <strong>Soundcraft Recorder</strong>
           <span id="soundcraft-status" class="soundcraft-status">Disabled</span>
@@ -147,28 +161,155 @@
             </div>
           </div>
 
-          <small class="soundcraft-note">The last selected mixer is remembered on this device.</small>
+          <small class="soundcraft-note">The last selected mixer is remembered on this device. Add, edit or remove mixers here. The two factory defaults can also be changed directly in <code>stage.html</code> under <code>OPENLP_DEFAULT_MIXERS</code>.</small>
         </div>
       </div>
 
-      <div class="help-section">
+
+      <div class="help-section final-help-section">
         <div class="help-title">Help</div>
-        <div class="help-row"><span class="help-icon"><svg class="icon-svg gear-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8.2a3.8 3.8 0 1 0 0 7.6 3.8 3.8 0 0 0 0-7.6Z"/><path d="M19.2 13.6c.08-.52.08-1.08 0-1.6l2-1.55-1.9-3.3-2.45.98a8.1 8.1 0 0 0-1.4-.8L15.1 4.7h-3.8l-.37 2.63c-.5.2-.97.47-1.4.8l-2.45-.98-1.9 3.3L7.2 12a8.5 8.5 0 0 0 0 1.6l-2.02 1.55 1.9 3.3 2.45-.98c.43.33.9.6 1.4.8l.37 2.63h3.8l.37-2.63c.5-.2.97-.47 1.4-.8l2.45.98 1.9-3.3-2.02-1.55Z"/></svg></span><span>Open these settings.</span></div>
-        <div class="help-row"><span class="help-icon"><svg class="icon-svg refresh-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.35 5.65"/><path d="M20 5v6h-6"/></svg></span><span>Reload the remote page completely.</span></div>
-        <div class="help-row"><span class="help-icon help-arrows"><svg class="icon-svg chevron-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg><svg class="icon-svg chevron-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span><span>Move to the previous or next service item.</span></div>
-        <div class="help-row"><strong>Blank</strong><span>Blank the presentation output.</span></div>
-        <div class="help-row"><strong>Show</strong><span>Return to the current presentation.</span></div>
-        <div class="help-row"><strong>Mixer Record</strong><span>When enabled, starts/stops the selected Soundcraft Ui12/Ui16 2-track USB recorder and follows the mixer-reported state.</span></div>
-        <div class="help-row"><strong>Service</strong><span>Choose a service item.</span></div>
-        <div class="help-row"><strong>Slides</strong><span>Choose a slide within the current service item.</span></div>
+
+        <div class="help-row final-help-row">
+          <span class="help-control">
+            <svg class="help-top-icon settings-gear-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <g class="settings-gear-teeth">
+                <line x1="12" y1="2.8" x2="12" y2="5.2"></line>
+                <line x1="12" y1="18.8" x2="12" y2="21.2"></line>
+                <line x1="2.8" y1="12" x2="5.2" y2="12"></line>
+                <line x1="18.8" y1="12" x2="21.2" y2="12"></line>
+                <line x1="5.5" y1="5.5" x2="7.2" y2="7.2"></line>
+                <line x1="16.8" y1="16.8" x2="18.5" y2="18.5"></line>
+                <line x1="18.5" y1="5.5" x2="16.8" y2="7.2"></line>
+                <line x1="7.2" y1="16.8" x2="5.5" y2="18.5"></line>
+              </g>
+              <circle class="settings-gear-ring" cx="12" cy="12" r="6.1"></circle>
+              <circle class="settings-gear-hole" cx="12" cy="12" r="2.5"></circle>
+            </svg>
+            <span class="help-control-label">Settings</span>
+          </span>
+          <span class="help-copy">Open settings, including list font size and optional mixer controls.</span>
+        </div>
+
+        <div class="help-row final-help-row">
+          <span class="help-control">
+            <svg class="help-top-icon refresh-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M20 6v5h-5"></path>
+              <path d="M19.2 11A7.5 7.5 0 1 0 20 15"></path>
+            </svg>
+            <span class="help-control-label">Refresh</span>
+          </span>
+          <span class="help-copy">Reload the remote page completely.</span>
+        </div>
+
+        <div class="help-row final-help-row">
+          <span class="help-control">
+            <span class="help-nav-icons">
+              <svg class="icon-svg chevron-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 15l6-6 6 6"></path></svg>
+              <svg class="icon-svg chevron-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>
+            </span>
+            <span class="help-control-label">Items</span>
+          </span>
+          <span class="help-copy">Move to the previous or next service item.</span>
+        </div>
+
+        <div class="help-row final-help-row">
+          <span class="help-control help-text-control">Blank</span>
+          <span class="help-copy">Blank the presentation output.</span>
+        </div>
+
+        <div class="help-row final-help-row">
+          <span class="help-control help-text-control">Show</span>
+          <span class="help-copy">Return to the current presentation.</span>
+        </div>
+
+        <div class="help-row final-help-row">
+          <span class="help-control">
+            <span class="help-tab-symbol">▤</span>
+            <span class="help-control-label">Service</span>
+          </span>
+          <span class="help-copy">Show the service list and choose a service item.</span>
+        </div>
+
+        <div class="help-row final-help-row">
+          <span class="help-control">
+            <span class="help-tab-symbol">▱</span>
+            <span class="help-control-label">Slides</span>
+          </span>
+          <span class="help-copy">Show the slides in the current service item and choose a slide.</span>
+        </div>
+
+        <div class="help-subtitle">Mixer recorder</div>
+
+        <div class="help-row final-help-row">
+          <span class="help-control">
+            <span class="help-record-button unavailable" aria-hidden="true">
+              <span class="soundcraft-record-icon"><span class="soundcraft-record-core"></span></span>
+              <span class="help-control-label">Record</span>
+            </span>
+          </span>
+          <span class="help-copy"><span class="help-copy-title">No USB / unavailable.</span> The recorder is not ready to start.</span>
+        </div>
+
+        <div class="help-row final-help-row">
+          <span class="help-control">
+            <span class="help-record-button ready" aria-hidden="true">
+              <span class="soundcraft-record-icon"><span class="soundcraft-record-core"></span></span>
+              <span class="help-control-label">Record</span>
+            </span>
+          </span>
+          <span class="help-copy"><span class="help-copy-title">Ready.</span> Tap Record to start USB recording.</span>
+        </div>
+
+        <div class="help-row final-help-row">
+          <span class="help-control">
+            <span class="help-record-button recording" aria-hidden="true">
+              <span class="soundcraft-record-icon"><span class="soundcraft-record-core"></span></span>
+              <span class="help-control-label">Record</span>
+            </span>
+          </span>
+          <span class="help-copy"><span class="help-copy-title">Recording.</span> Tap Record once to request a stop.</span>
+        </div>
+
+        <div class="help-row final-help-row">
+          <span class="help-control">
+            <span class="help-confirm-button" aria-hidden="true">CONFIRM</span>
+            <span class="help-control-label">Record</span>
+          </span>
+          <span class="help-copy"><span class="help-copy-title">Confirm stop.</span> Tap CONFIRM within 3 seconds to stop; otherwise recording continues.</span>
+        </div>
+
+        <div class="help-row final-help-row">
+          <span class="help-control help-text-control help-change-mixer">Change Mixer</span>
+          <span class="help-copy">Step through saved mixers. After the last mixer, it loops back to the first. Add, edit or remove mixers in Settings.</span>
+        </div>
       </div>
+
+      <div class="nerd-notes">
+        <div class="nerd-notes-title">Nerd notes</div>
+        <div class="nerd-note-item">
+          <span class="nerd-note-heading">Theme</span>
+          <span class="nerd-note-copy">Change the remote colours and current-slide emphasis in <code>stages/remote/theme.css</code>.</span>
+        </div>
+        <div class="nerd-note-item">
+          <span class="nerd-note-heading">Mixers</span>
+          <span class="nerd-note-copy">Change built-in mixer defaults in <code>window.OPENLP_DEFAULT_MIXERS</code> near the bottom of <code>stages/remote/stage.html</code>. Add/Edit/Remove changes made in Settings are saved in that browser and take precedence.</span>
+        </div>
+      </div>
+
     </div>
   </div>
-        <div class="help-row">
-          <strong>Theme</strong>
-          <span>Nerd note: change the remote theme/look in the OpenLP data directory at <code>stages/remote/theme.css</code>.</span>
-        </div>
 </div>
+<script>
+  /*
+    Default Soundcraft mixers.
+    Edit these names/addresses directly in stage.html if your normal mixers change.
+    Saved mixer edits/additions in Settings are still supported and stored in this browser.
+  */
+  window.OPENLP_DEFAULT_MIXERS = [
+    // Example:
+    // { id: "church-mixer", name: "Church Mixer", host: "192.168.1.50" }
+  ];
+</script>
 <script src="remote.js"></script>
 </body>
 </html>
